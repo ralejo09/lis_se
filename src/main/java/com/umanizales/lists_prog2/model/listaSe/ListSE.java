@@ -1,6 +1,7 @@
-package com.umanizales.lis_se.model;
+package com.umanizales.lists_prog2.model.listaSe;
 
-import com.umanizales.lis_se.Exception.ListaSeException;
+import com.umanizales.lists_prog2.Exception.ListaSeException;
+import com.umanizales.lists_prog2.model.Boy;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,13 @@ public class ListSE {
     private int count;
     //private int countMunicipio;
 
-    public boolean add(Boy boy)
+    public void add(Boy boy) throws ListaSeException
     {
+        Boy boyExist = findById(boy.getIdentification());
+        if(boyExist != null)
+        {
+            throw new ListaSeException("La identificacion ya existe");
+        }
         if(head == null)
         {
             head = new Node(boy);
@@ -25,21 +31,21 @@ public class ListSE {
             Node temp = head;
             while (temp.getNext()!=null)
             {
-                if(boy.getIdentification().equals(temp.getData().getIdentification()))
-                {
-                    return false;
-                }
                 temp = temp.getNext();
             }
             //Se queda parado en el ultimo
             temp.setNext(new Node(boy));
         }
         count++;
-        return true;
     }
 
-    public void addToStart(Boy boy)
+    public void addToStart(Boy boy) throws ListaSeException
     {
+        Boy boyExist = findById(boy.getIdentification());
+        if(boyExist != null)
+        {
+            throw new ListaSeException("La identificacion ya existe");
+        }
         if(this.head==null)
         {
             this.head = new Node(boy);
@@ -53,7 +59,45 @@ public class ListSE {
         count++;
     }
 
-    public void invertList()
+    public void addPosition(Boy boy, int position) throws ListaSeException
+    {
+        Boy boyExist = findById(boy.getIdentification());
+        if(boyExist != null)
+        {
+            throw new ListaSeException("La identificacion ya existe");
+        }
+        //validar posicion
+        if(position > count)
+        {
+            this.add(boy);
+            return;
+            //throw new ListaSeException("La posicion ingresada no es valida");
+        }
+        if(position==1)
+        {
+            addToStart(boy);
+        }
+        else
+        {
+            int cont=1;
+            Node temp = this.head;
+            while(temp!=null)
+            {
+                if(cont==position-1)
+                {
+                    break;
+                }
+                temp = temp.getNext();
+                cont++;
+            }
+            Node nodeNew= new Node(boy);
+            nodeNew.setNext(temp.getNext());
+            temp.setNext(nodeNew);
+            count++;
+        }
+    }
+
+    public void invertList() throws ListaSeException
     {
         if(this.head != null) {
             ListSE listTemp = new ListSE();
@@ -66,6 +110,7 @@ public class ListSE {
             }
             this.head = listTemp.getHead();
         }
+
     }
 
     public int count()
@@ -140,6 +185,7 @@ public class ListSE {
                     }
                     temp = temp.getNext();
                 }
+                //temp va estar parado en el anterior al que debo de eliminar o va a ser null
                 if(temp!=null)
                 {
                     temp.setNext(temp.getNext().getNext());
@@ -152,33 +198,92 @@ public class ListSE {
         }
         else
         {
-            throw new ListaSeException("No hay datos en la lista");
+            validateListEmpty();
         }
     }
 
-    /*
-    public void delete(String id)
+    public Boy findById(String id)
     {
         Node temp = this.head;
-        if(temp.getData().getIdentification().equals(id))
+        while(temp!= null)
         {
-            setHead(temp.getNext());
+            if(temp.getData().getIdentification().equals(id))
+            {
+                return temp.getData();
+            }
+            temp=temp.getNext();
+        }
+        return null;
+    }
+
+    public ListSE getListSeBoysByGender(String gender) throws ListaSeException
+    {
+        validateListEmpty();
+        Node temp = this.head;
+        ListSE listTemp = new ListSE();
+        while (temp!=null)
+        {
+            if(temp.getData().getGender().name().equals(gender))
+            {
+                listTemp.add(temp.getData());
+            }
+            temp= temp.getNext();
+        }
+        return listTemp;
+    }
+
+    public void variantBoys() throws ListaSeException
+    {
+        validateListEmpty();
+        ListSE kids= this.getListSeBoysByGender("MASCULINO");
+        ListSE girls= this.getListSeBoysByGender("FEMENINO");
+        ListSE minList = null;
+        ListSE maxList = null;
+        if(kids.getCount()>girls.getCount())
+        {
+            minList=girls;
+            maxList=kids;
         }
         else
         {
-            while (temp.getNext() != null)
-            {
-                if(temp.getNext().getData().getIdentification().equals(id))
-                {
-                    temp.setNext(temp.getNext().getNext());
-                    break;
-                }
-                temp = temp.getNext();
-            }
+            minList= kids;
+            maxList= girls;
         }
-        count--;
+        Node temp = minList.getHead();
+        int pos=2;
+        while (temp!=null)
+        {
+            maxList.addPosition(temp.getData(), pos);
+            pos = pos + 2;
+            temp= temp.getNext();
+        }
+        this.head= maxList.getHead();
     }
-    */
+
+    public int getCountBoysByLocation(String code)
+    {
+        Node temp = this.getHead();
+        int count = 0;
+        while (temp!=null)
+        {
+            if(temp.getData().getLocation().getCode().equals(code))
+            {
+                count++;
+            }
+            temp=temp.getNext();
+        }
+        return count;
+    }
+
+    ////////////////////////
+    public void validateListEmpty() throws ListaSeException
+    {
+        if(this.head==null)
+        {
+            throw new ListaSeException("No hay datos en la lista");
+        }
+    }
+    ////////////////////////
 
     public void noRepeat(Boy boy)
     {
@@ -209,10 +314,10 @@ public class ListSE {
             Node temp = this.head;
             List<Boy> list = new ArrayList<>();
                 while (temp != null) {
-                    if(gender.equals("Femenino")) {
+                    if(gender.equals("FEMENINO")) {
                         list.add(temp.getData());
                         temp = temp.getNext();
-                    }else if(gender.equals("Masculino")){
+                    }else if(gender.equals("MASCULINO")){
                         list.add(temp.getData());
                         temp = temp.getNext();
                     }
@@ -221,6 +326,28 @@ public class ListSE {
         }
         return null;
     }
+
+
+    /*
+    public int countMunicipio(String municipio)
+    {
+        //int cont=0;
+        int conMunicipio = 0;
+        if(this.head != null) {
+            Node temp = this.head;
+            while(temp.getNext()!= null)
+            {
+                if(temp.getData().getMunicipio().equals(municipio))
+                {
+                    conMunicipio++;
+                }
+                temp = temp.getNext();
+            }
+            conMunicipio++;
+        }
+        return conMunicipio;
+    }
+    */
 
     /*
     public void forGenderList(String gender)
@@ -240,29 +367,29 @@ public class ListSE {
         }
     }*/
 
-
-
-
-
-
-    public int countMunicipio(String municipio)
+    /*
+    public void delete(String id)
     {
-        //int cont=0;
-        int conMunicipio = 0;
-        if(this.head != null) {
-            Node temp = this.head;
-            while(temp.getNext()!= null)
+        Node temp = this.head;
+        if(temp.getData().getIdentification().equals(id))
+        {
+            setHead(temp.getNext());
+        }
+        else
+        {
+            while (temp.getNext() != null)
             {
-                if(temp.getData().getMunicipio().equals(municipio))
+                if(temp.getNext().getData().getIdentification().equals(id))
                 {
-                    conMunicipio++;
+                    temp.setNext(temp.getNext().getNext());
+                    break;
                 }
                 temp = temp.getNext();
             }
-            conMunicipio++;
         }
-        return conMunicipio;
+        count--;
     }
+    */
 
     /*public List<Boy> formunicipio(String municipio)
     {

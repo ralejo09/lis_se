@@ -1,4 +1,4 @@
-package com.umanizales.lis_se.controller.dto;
+package com.umanizales.lists_prog2.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,14 +1,15 @@
-package com.umanizales.lis_se.controller;
+package com.umanizales.lists_prog2.controller;
 
-import com.umanizales.lis_se.Exception.ListaSeException;
-import com.umanizales.lis_se.controller.dto.ResponseDTO;
-import com.umanizales.lis_se.model.Boy;
-import com.umanizales.lis_se.service.ListSeService;
+import com.umanizales.lists_prog2.Exception.ListaSeException;
+import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
+import com.umanizales.lists_prog2.model.Boy;
+import com.umanizales.lists_prog2.service.ListSeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class BoysController {
     private ListSeService listSeService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addBoy(@RequestBody Boy boy) { return listSeService.addBoy(boy);}
+    public ResponseEntity<ResponseDTO> addBoy(@RequestBody @Valid Boy boy) throws ListaSeException { return listSeService.addBoy(boy);}
 
     @GetMapping
     public ResponseEntity<ResponseDTO> listBoys() throws ListaSeException {
@@ -30,13 +31,17 @@ public class BoysController {
     public ResponseEntity<ResponseDTO> listBoysFree() throws ListaSeException { return listSeService.listBoysFree();}
 
     @GetMapping(path = "invert")
-    public ResponseEntity<ResponseDTO> invertList() { return listSeService.invertList();}
+    public ResponseEntity<ResponseDTO> invertList() throws ListaSeException { return listSeService.invertList();}
 
     @PostMapping(path = "addtostart")
-    public ResponseEntity<ResponseDTO> addBoyToStart(@RequestBody Boy boy) { return listSeService.addBoyToStart(boy);}
+    public ResponseEntity<ResponseDTO> addBoyToStart(@RequestBody @Valid Boy boy) throws ListaSeException { return listSeService.addBoyToStart(boy);}
+
+    @PostMapping(path = "addtoposition/{position}")
+    public ResponseEntity<ResponseDTO> addBoyByposition(@PathVariable @Valid int position, @RequestBody @Valid Boy boy) throws ListaSeException
+    { return listSeService.addBoyByPosition(boy,position);}
 
     @PostMapping(path= "addboys")
-    public ResponseEntity<ResponseDTO> addBoys(@RequestBody List<Boy> boys) throws ListaSeException
+    public ResponseEntity<ResponseDTO> addBoys(@RequestBody @Valid List<Boy> boys) throws ListaSeException
     {
         for(Boy boy:boys)
         {
@@ -57,6 +62,13 @@ public class BoysController {
     @GetMapping (path = "/delete/{id}")
     public ResponseEntity<ResponseDTO> delete(@PathVariable String id) throws ListaSeException { return listSeService.delete(id);}
 
+    @GetMapping(path = "variant")
+    public ResponseEntity<ResponseDTO> variantList() throws ListaSeException { return listSeService.variantList();}
+
+    @GetMapping(path = "boysbylocation")
+    public ResponseEntity<ResponseDTO> boysByLocation(){return listSeService.getBoysByLocation();}
+
+    /////////////////////
     @GetMapping(path = "/list/{gender}")
     public ResponseEntity<ResponseDTO> forGender(@PathVariable String gender) throws ListaSeException { return listSeService.forGender(gender);}
 
@@ -64,8 +76,11 @@ public class BoysController {
     @GetMapping(path = "/lista/{gender}")
     public ResponseEntity<ResponseDTO> forGenderList(@PathVariable String gender) { return listSeService.forGenderList(gender);}
     */
+
+    /*
     @GetMapping(path = "/count/{municipio}")
     public ResponseEntity<ResponseDTO> countMunicipio(@PathVariable String municipio) { return listSeService.countMunicipio(municipio);}
+    */
 
     /*
     @PostMapping (path = "norepeat")

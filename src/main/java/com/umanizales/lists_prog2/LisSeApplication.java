@@ -1,4 +1,4 @@
-package com.umanizales.lis_se;
+package com.umanizales.lists_prog2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
