@@ -2,9 +2,7 @@ package com.umanizales.lists_prog2.service;
 
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
-import com.umanizales.lists_prog2.model.Boy;
-import com.umanizales.lists_prog2.model.BoysByLocation;
-import com.umanizales.lists_prog2.model.Location;
+import com.umanizales.lists_prog2.model.*;
 import com.umanizales.lists_prog2.model.listaSe.ListSE;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,11 +17,13 @@ import java.util.List;
 public class ListSeService {
     private ListSE listBoys;
     private List<Location> locations;
+    private List<Gender1> genders;
 
     public ListSeService()
     {
         listBoys = new ListSE();
         initializeLocations();
+        initializeGenders();
     }
 
     private void initializeLocations()
@@ -33,6 +33,13 @@ public class ListSeService {
         locations.add(new Location("2","Bogota"));
         locations.add(new Location("3","Armenia"));
         locations.add(new Location("4","Pereira"));
+    }
+
+    private void initializeGenders()
+    {
+        genders= new ArrayList<>();
+        genders.add(new Gender1("1","FEMENINO"));
+        genders.add(new Gender1("2","MASCULINO"));
     }
 
     public boolean validateLocation(Location location)
@@ -124,6 +131,17 @@ public class ListSeService {
             boysByLocations.add(new BoysByLocation(loc,count));
         }
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio",boysByLocations,null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> getBoysByGender()
+    {
+        List<BoysByGender> boysByGenders = new ArrayList<>();
+        for(Gender1 gender:genders)
+        {
+            int count = listBoys.getCountBoysByGender(gender.getCode());
+            boysByGenders.add(new BoysByGender(gender,count));
+        }
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",boysByGenders,null), HttpStatus.OK);
     }
 
     ///////////////////

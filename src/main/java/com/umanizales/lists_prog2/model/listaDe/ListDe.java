@@ -3,6 +3,7 @@ package com.umanizales.lists_prog2.model.listaDe;
 import com.umanizales.lists_prog2.Exception.ListaDeException;
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.model.Boy;
+import com.umanizales.lists_prog2.model.Gender;
 import lombok.Data;
 
 import java.util.ArrayList;

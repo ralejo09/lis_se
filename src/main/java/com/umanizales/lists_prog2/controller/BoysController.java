@@ -72,6 +72,9 @@ public class BoysController {
     @GetMapping(path = "boysbylocation")
     public ResponseEntity<ResponseDTO> boysByLocation(){return listSeService.getBoysByLocation();}
 
+    @GetMapping(path = "boysbygender")
+    public ResponseEntity<ResponseDTO> boysByGender(){return listSeService.getBoysByGender();}
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Lista doblemente enlazada
 

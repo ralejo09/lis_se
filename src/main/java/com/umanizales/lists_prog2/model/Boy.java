@@ -26,8 +26,9 @@ public class Boy {
     @Positive
 
     private byte age;
+    @Valid
     @NotNull
-    private Gender gender;
+    private Gender1 gender;
     @Valid
     @NotNull
     private Location location;

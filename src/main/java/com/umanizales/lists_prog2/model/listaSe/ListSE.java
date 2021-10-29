@@ -2,6 +2,8 @@ package com.umanizales.lists_prog2.model.listaSe;
 
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.model.Boy;
+import com.umanizales.lists_prog2.model.Gender;
+import com.umanizales.lists_prog2.model.Gender1;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -223,7 +225,7 @@ public class ListSE {
         ListSE listTemp = new ListSE();
         while (temp!=null)
         {
-            if(temp.getData().getGender().name().equals(gender))
+            if(temp.getData().getGender().getDescription().equals(gender))
             {
                 listTemp.add(temp.getData());
             }
@@ -274,6 +276,21 @@ public class ListSE {
         }
         return count;
     }
+
+    public int getCountBoysByGender(String code)
+     {
+         Node temp = this.getHead();
+         int count = 0;
+         while (temp!=null)
+         {
+             if(temp.getData().getGender().getCode().equals(code))
+             {
+                 count++;
+             }
+             temp=temp.getNext();
+         }
+         return count;
+     }
 
     ////////////////////////
     public void validateListEmpty() throws ListaSeException
