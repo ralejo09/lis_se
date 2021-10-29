@@ -1,8 +1,10 @@
 package com.umanizales.lists_prog2.controller;
 
+import com.umanizales.lists_prog2.Exception.ListaDeException;
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
 import com.umanizales.lists_prog2.model.Boy;
+import com.umanizales.lists_prog2.service.ListDeService;
 import com.umanizales.lists_prog2.service.ListSeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import java.util.List;
 public class BoysController {
     @Autowired
     private ListSeService listSeService;
+    @Autowired
+    private ListDeService listDeService;
 
     @PostMapping
     public ResponseEntity<ResponseDTO> addBoy(@RequestBody @Valid Boy boy) throws ListaSeException { return listSeService.addBoy(boy);}
@@ -67,6 +71,42 @@ public class BoysController {
 
     @GetMapping(path = "boysbylocation")
     public ResponseEntity<ResponseDTO> boysByLocation(){return listSeService.getBoysByLocation();}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Lista doblemente enlazada
+
+    @PostMapping(path = "addde")
+    public ResponseEntity<ResponseDTO> addBoyToStartDe(@RequestBody @Valid Boy boy) throws ListaDeException
+    {
+        return listDeService.addBoyDe(boy);
+    }
+
+    @PostMapping(path = "addtostartde")
+    public ResponseEntity<ResponseDTO> addBoyDe(@RequestBody @Valid Boy boy) throws ListaDeException
+    {
+        return listDeService.addBoyToStartDe(boy);
+    }
+
+    @GetMapping (path = "/deletede/{id}")
+    public ResponseEntity<ResponseDTO> deleteDe(@PathVariable String id) throws ListaDeException { return listDeService.deleteDe(id);}
+
+    @GetMapping(path = "changextremesde")
+    public ResponseEntity<ResponseDTO> chageXtremesDe() throws ListaDeException { return listDeService.changeXtremesDe();}
+
+    @PostMapping(path = "addtopositionde/{position}")
+    public ResponseEntity<ResponseDTO> addBoyBypositionDe(@PathVariable @Valid int position, @RequestBody @Valid Boy boy) throws ListaDeException
+    { return listDeService.addBoyByPositionDe(boy,position);}
+
+    @GetMapping(path = "listde")
+    public ResponseEntity<ResponseDTO> listBoysDe() throws ListaDeException {
+        return listDeService.listBoysDe();
+    }
+
+    @GetMapping(path = "freede")
+    public ResponseEntity<ResponseDTO> listBoysFreeDe() throws ListaDeException
+    {
+        return listDeService.listBoysFreeDe();
+    }
 
     /////////////////////
     @GetMapping(path = "/list/{gender}")

@@ -1,5 +1,6 @@
 package com.umanizales.lists_prog2.controller;
 
+import com.umanizales.lists_prog2.Exception.ListaDeException;
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.controller.dto.ErrorDTO;
 import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
@@ -18,6 +19,14 @@ public class ErrorHandlerController {
 
     @ExceptionHandler(ListaSeException.class)
     protected ResponseEntity<?> handle(ListaSeException ex)
+    {
+        String message = ex.getMessage();
+        ResponseDTO response = new ResponseDTO(message,null,null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ListaDeException.class)
+    protected ResponseEntity<?> handle(ListaDeException ex)
     {
         String message = ex.getMessage();
         ResponseDTO response = new ResponseDTO(message,null,null);

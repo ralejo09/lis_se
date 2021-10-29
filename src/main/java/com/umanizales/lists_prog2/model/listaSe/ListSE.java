@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+ @Data
 @Service
 public class ListSE {
     private Node head;
     private int count;
     //private int countMunicipio;
-
+    //ya
     public void add(Boy boy) throws ListaSeException
     {
         Boy boyExist = findById(boy.getIdentification());
@@ -38,7 +38,7 @@ public class ListSE {
         }
         count++;
     }
-
+    //ya
     public void addToStart(Boy boy) throws ListaSeException
     {
         Boy boyExist = findById(boy.getIdentification());
@@ -58,7 +58,7 @@ public class ListSE {
         }
         count++;
     }
-
+    //ya
     public void addPosition(Boy boy, int position) throws ListaSeException
     {
         Boy boyExist = findById(boy.getIdentification());
@@ -127,7 +127,7 @@ public class ListSE {
         }
         return cont;
     }
-
+    //ya
     public List<Boy> list() throws ListaSeException
     {
         if(this.head!=null)
@@ -144,7 +144,7 @@ public class ListSE {
         throw new ListaSeException("no hay datos en la lista");
         //return null;
     }
-
+    //ya
     public void changeXtremes() throws ListaSeException
     {
         if(this.head!=null && this.head.getNext()!=null)
@@ -165,7 +165,7 @@ public class ListSE {
             throw new ListaSeException("No es posible ejecutar el cambio de extremos");
         }
     }
-
+    //ya
     public void delete(String identification) throws ListaSeException
     {
         if(this.head != null)
@@ -201,7 +201,7 @@ public class ListSE {
             validateListEmpty();
         }
     }
-
+    //ya
     public Boy findById(String id)
     {
         Node temp = this.head;
