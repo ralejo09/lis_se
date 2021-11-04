@@ -14,11 +14,29 @@ import java.util.List;
 
 @Getter
 @Service
+/**
+ * Clase creada para hacer el llamado de listas y generar las respectivas respuestas a los metodos
+ * @author Alejo Carmona
+ * @version 1.0 - 2-nov-2021
+ */
 public class ListSeService {
+    /**
+     * atributo creado para llamar la respectiva lista de niños
+     */
     private ListSE listBoys;
+    /**
+     * atributo creado para hacer referencia a el arraylist que tenemos para la localizacion
+     */
     private List<Location> locations;
+    /**
+     * atributo creado para hacer referencia a el arraylist que tenemos para el genero
+     */
     private List<Gender1> genders;
 
+
+    /**
+     * constructor creado para inicializar las listas
+     */
     public ListSeService()
     {
         listBoys = new ListSE();
@@ -26,6 +44,9 @@ public class ListSeService {
         initializeGenders();
     }
 
+    /**
+     * arraylist de lozalizaciones por codigo y descripcion
+     */
     private void initializeLocations()
     {
         locations= new ArrayList<>();
@@ -33,8 +54,12 @@ public class ListSeService {
         locations.add(new Location("2","Bogota"));
         locations.add(new Location("3","Armenia"));
         locations.add(new Location("4","Pereira"));
+        locations.add(new Location("5","Cali"));
     }
 
+    /**
+     * arraylist de generos por codigo y descripcion
+     */
     private void initializeGenders()
     {
         genders= new ArrayList<>();
@@ -42,28 +67,72 @@ public class ListSeService {
         genders.add(new Gender1("2","MASCULINO"));
     }
 
+
+    /**
+     * metodo que me valida si es una localizacion valida o no
+     * @param location le entra como parametro la localizacion del niño
+     * @return retorna una respuesta boolean
+     */
     public boolean validateLocation(Location location)
     {
+        /**
+         * generamos un ciclo para que nos recorra todas las localizaciones de cada niño
+         */
         for(Location loc: locations)
         {
+            /**
+             * si el codigo es igual al codigo que ingresamos al niño y si la descripcion es igual a la
+             * descripcion que ingresamos al niño
+             */
             if(loc.getCode().equals(location.getCode()) && loc.getDescription().equals(location.getDescription()))
             {
+                /**
+                 * retorneme que la localizacion si es buena, acertada, correcta, TRUE
+                 */
                 return true;
             }
         }
+        /**
+         * retorneme que la localizacion es falsa FALSE
+         */
         return false;
     }
 
+    /**
+     * Metodo que nos adiciona un niño al final de la lista
+     * @param boy le entra como parametro todos los atributos del niño
+     * @return retorna una respuesta de si fue satisfactoria la adicion
+     * @throws ListaSeException
+     */
     public ResponseEntity<ResponseDTO> addBoy(Boy boy) throws ListaSeException
     {
+        /**
+         * validamos que la localizacion si sea valida a la que vamos a adicionar y si exista en nuestro listado
+         */
         if(!validateLocation(boy.getLocation()))
         {
+            /**
+             * se lanza una excepcion si la ubicacion ingreda no es valida, haciendo esto que nos añada al niño
+             */
             throw new ListaSeException("La ubicacion ingresada no es valida");
         }
+        /**
+         * invocamos al metodo de adicionar al final, para que nos adicione el niño
+         */
         listBoys.add(boy);
-            return new ResponseEntity<>(new ResponseDTO("Niño adicionado",boy,null), HttpStatus.OK);
+        /**
+         * retornamos una respuesta indicando que la adicion del niño esta correcta
+         */
+        return new ResponseEntity<>(new ResponseDTO("Niño adicionado",boy,null), HttpStatus.OK);
     }
 
+    /**
+     * Metodo que nos adiciona un niño en la posicion de la lista que le indiquemos
+     * @param boy le entra como parametro todos los atributos del niño
+     * @param position le entra como parametro la posicion para saber en que posicion se va a adicionar el niño
+     * @return retorna una respuesta de si fue satisfactoria la adicion
+     * @throws ListaSeException
+     */
     public ResponseEntity<ResponseDTO> addBoyByPosition(Boy boy, int position) throws ListaSeException
     {
         listBoys.addPosition(boy,position);
@@ -144,11 +213,55 @@ public class ListSeService {
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio",boysByGenders,null), HttpStatus.OK);
     }
 
+    public ResponseEntity<ResponseDTO> listForAgeAndLoca(int age, String code) throws ListaSeException
+    {
+        listBoys.listForAgeAndLocations(age,code);
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.getHead(), null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> listForAgeAndGender(int age, String code) throws ListaSeException
+    {
+        listBoys.listForAgeAndGender(age,code);
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.getHead(), null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> deleteForAge(byte age) throws ListaSeException {
+        // se llama el metodo eliminar niño y se le envia un parametro que es identificacion
+        listBoys.deleteForAge(age);
+        // respuesta satisfactoria con el sistema
+        return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> deleteForGender(String code) throws ListaSeException {
+        // se llama el metodo eliminar niño y se le envia un parametro que es identificacion
+        listBoys.deleteForGender(code);
+        // respuesta satisfactoria con el sistema
+        return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> listForGrade(byte grade) throws ListaSeException
+    {
+        listBoys.listForGrade(grade);
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.getHead(), null), HttpStatus.OK);
+    }
+
+
+
     ///////////////////
+
+    /*public ResponseEntity<ResponseDTO> deleteBoyByPosition(int position) throws ListaSeException
+    {
+        listBoys.deleteByPosition(position);
+        return new ResponseEntity<>(new ResponseDTO("Niño adicionado",true,null), HttpStatus.OK);
+    }*/
+
+    /*
     public ResponseEntity<ResponseDTO> forGender(String gender) throws ListaSeException
     {
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.list().stream().filter(boy -> boy.getGender().equals(gender)), null), HttpStatus.OK);
     }
+
+     */
 
     /*
     public ResponseEntity<ResponseDTO> forGenderList(String gender)

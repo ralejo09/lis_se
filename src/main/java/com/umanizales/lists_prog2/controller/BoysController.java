@@ -75,6 +75,31 @@ public class BoysController {
     @GetMapping(path = "boysbygender")
     public ResponseEntity<ResponseDTO> boysByGender(){return listSeService.getBoysByGender();}
 
+    @GetMapping(path = "/listforageandloc/{age}/{code}")
+    public ResponseEntity<ResponseDTO> listForAgeAndLoca(@PathVariable int age, @PathVariable String code) throws ListaSeException
+    { return listSeService.listForAgeAndLoca(age,code);}
+
+    @GetMapping(path = "/listforageandgender/{age}/{code}")
+    public ResponseEntity<ResponseDTO> listForAgeAndGender(@PathVariable int age, @PathVariable String code) throws ListaSeException
+    { return listSeService.listForAgeAndGender(age,code);}
+
+    @GetMapping(path = "/deleteforage/{age}")
+    public ResponseEntity<ResponseDTO> deleteBoyForAge(@PathVariable byte age) throws ListaSeException {
+        return listSeService.deleteForAge(age);
+    }
+
+    @GetMapping(path = "/deleteforgender/{code}")
+    public ResponseEntity<ResponseDTO> deleteBoyForGender(@PathVariable String code) throws ListaSeException {
+        return listSeService.deleteForGender(code);
+    }
+
+    @GetMapping(path = "/listforgrade/{grade}")
+    public ResponseEntity<ResponseDTO> listForGrade(@PathVariable byte grade) throws ListaSeException
+    { return listSeService.listForGrade(grade);}
+
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Lista doblemente enlazada
 
@@ -112,8 +137,15 @@ public class BoysController {
     }
 
     /////////////////////
+
+    /*@GetMapping(path = "deletetoposition/{position}")
+    public ResponseEntity<ResponseDTO> deleteByposition(@PathVariable @Valid int position) throws ListaSeException
+    { return listSeService.deleteBoyByPosition(position);}*/
+
+    /*
     @GetMapping(path = "/list/{gender}")
     public ResponseEntity<ResponseDTO> forGender(@PathVariable String gender) throws ListaSeException { return listSeService.forGender(gender);}
+    */
 
     /*
     @GetMapping(path = "/lista/{gender}")
@@ -146,4 +178,5 @@ public class BoysController {
         return listSeService.forGender(forGender().toString());
 
     }*/
+
 }
