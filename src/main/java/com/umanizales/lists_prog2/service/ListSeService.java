@@ -226,16 +226,12 @@ public class ListSeService {
     }
 
     public ResponseEntity<ResponseDTO> deleteForAge(byte age) throws ListaSeException {
-        // se llama el metodo eliminar niño y se le envia un parametro que es identificacion
         listBoys.deleteForAge(age);
-        // respuesta satisfactoria con el sistema
         return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDTO> deleteForGender(String code) throws ListaSeException {
-        // se llama el metodo eliminar niño y se le envia un parametro que es identificacion
         listBoys.deleteForGender(code);
-        // respuesta satisfactoria con el sistema
         return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
     }
 
@@ -245,6 +241,37 @@ public class ListSeService {
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.getHead(), null), HttpStatus.OK);
     }
 
+    public ResponseEntity<ResponseDTO> locationMax()
+    {
+        List<BoysByLocation> boysByLocations = new ArrayList<>();
+        int maxLocation=0;
+        for(Location loc:locations)
+        {
+            int count = listBoys.getCountBoysByLocation(loc.getCode());
+            if(count> maxLocation){
+                maxLocation=count;
+                boysByLocations.clear();
+                boysByLocations.add(new BoysByLocation(loc,maxLocation));
+            }
+            else {
+                if (count == maxLocation) {
+                    boysByLocations.add(new BoysByLocation(loc, maxLocation));
+                }
+            }
+        }
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",boysByLocations,null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> orderBoysAges() throws ListaSeException
+    {
+        listBoys.orderBoysAge();
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio",listBoys.getHead(), null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO> deleteForPosition(int position) throws ListaSeException {
+        listBoys.deleteByPosition(position);
+        return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
+    }
 
 
     ///////////////////

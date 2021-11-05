@@ -2,6 +2,7 @@ package com.umanizales.lists_prog2.model.listaSe;
 
 import com.umanizales.lists_prog2.Exception.ListaSeException;
 import com.umanizales.lists_prog2.model.Boy;
+import com.umanizales.lists_prog2.model.BoysByLocation;
 import com.umanizales.lists_prog2.model.Gender;
 import com.umanizales.lists_prog2.model.Gender1;
 import lombok.Data;
@@ -801,111 +802,396 @@ public class ListSE {
          return count;
      }
 
-    public void listForAgeAndLocations (int age, String code) throws ListaSeException
-    {
-        validateListEmpty();
-        if (this.head != null) {
-            ListSE listTemp = new ListSE();
-            Node temp = this.head;
-            while(temp != null)
-            {
-                if (temp.getData().getAge()<= age && temp.getData().getLocation().getCode().equals(code)){
-                    listTemp.addToStart(temp.getData());
-                }
-                temp = temp.getNext();
-            }
-            this.head = listTemp.getHead();
-        }
-    }
-
-
-    public void listForAgeAndGender (int age, String code) throws ListaSeException
-    {
-        validateListEmpty();
-        if (this.head != null) {
-            ListSE listTemp = new ListSE();
-            Node temp = this.head;
-            while(temp != null)
-            {
-                /*if(temp.getData().getAge()!=age){
-                    throw new ListaSeException("No es posible hacer la busqueda pruebe otros datos");
-                }*/
-                if(temp.getData().getAge()<=age && temp.getData().getGender().getCode().equals(code)){
-                    listTemp.addToStart(temp.getData());
-                }
-                else {
-                    listTemp.add(temp.getData());
-                }
-                temp = temp.getNext();
-            }
-            this.head = listTemp.getHead();
-        }
-    }
-
-    public void deleteForAge(byte age) throws ListaSeException
-    {
-        validateListEmpty();
-        Node temp = this.head;
-        while(temp!=null){
-            if(temp.getData().getAge()>age){
-                delete(temp.getData().getIdentification());
-            }
-            temp=temp.getNext();
-        }
-    }
-
-    public void deleteForGender(String code) throws ListaSeException{
-        validateListEmpty();
-        Node temp = this.head;
-        while(temp!=null){
-            if(temp.getData().getGender().getCode().equals(code)){
-                delete(temp.getData().getIdentification());
-            }
-            temp=temp.getNext();
-        }
-    }
-
-    public void listForGrade(byte grade) throws ListaSeException{
-        validateListEmpty();
-        if (this.head != null) {
-            ListSE listTemp = new ListSE();
-            Node temp = this.head;
-            while(temp != null)
-            {
-                if (temp.getData().getGrade()==grade){
-                    listTemp.addToStart(temp.getData());
-                }
-                temp = temp.getNext();
-            }
-            this.head = listTemp.getHead();
-        }
-    }
-
-
-
-
-
-    ////////////////////////
-
-    //METODO QUE NOS VALIDA SI SI HAY DATOS EN LA LISTA
-    /**
-     * creamos el metodo para evaluar si en la lista hay 1 o mas datos
-     * @throws ListaSeException se lanza la excepcion en caso de no haber datos
+     //METODO QIE NOS LISTA POR EDAD Y POR LOCALIZACION
+     /**
+     * creamos un metodo que dada la edad y la localizacion nos liste los niños que pertenezcan a esta localizacion
+     * y que su edad sea menos o igual a la dada
+     * @param age le entra como parametro el edad del niño
+     * @param code le entra como parametro el codigo del la localizacion
+     * @throws ListaSeException
      */
-    public void validateListEmpty() throws ListaSeException
-    {
+     public void listForAgeAndLocations (int age, String code) throws ListaSeException
+     {
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * Se crea un if con el fin de indicarle al metodo que si la cabeza(el primer niño) es nula, retorne
+          * que no hay datos en la lista
+          */
+         if (this.head != null) {
+             /**
+              * Cojemos la lista que ya tenemos y le cremos una temporal
+              */
+             ListSE listTemp = new ListSE();
+             /**
+              * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+              */
+             Node temp = this.head;
+             /**
+              * Creo un ciclo para recorrer la lista SE de principio a fin
+              * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+              */
+             while(temp != null)
+             {
+                 /**
+                  * tomamos el dato que tenga el ayudante y miramos si la edad es menor o igual a la ingresada
+                  * y si ademas el codigo de la localizacion es correcto, si es correcto lo adicionamos al inicio
+                  * de la nueva lista temporal
+                  */
+                 if (temp.getData().getAge()<= age && temp.getData().getLocation().getCode().equals(code)){
+                     listTemp.addToStart(temp.getData());
+                 }
+                 /**
+                  * el ayudante cambia al siguiente node de el que ya esta
+                  */
+                 temp = temp.getNext();
+             }
+             /**
+              * le decimos a la cabeza que agarre nuestra nueva lista temporal
+              */
+             this.head = listTemp.getHead();
+         }
+     }
+
+     //METODO QUE NOS LISTA AL INICIO DE LA LISTA LOS NIÑOS POR EDAD Y EL GENERO
+     /**
+     * creamos un metodo que dada la edad y su genero nos liste los niños al inicio de la lista
+     * que tengan el mismo genero y que su edad sea menor o igual a la dada
+     * @param age le entra como parametro el edad del niño
+     * @param code le entra como parametro el codigo del genero
+     * @throws ListaSeException
+     */
+     public void listForAgeAndGender (int age, String code) throws ListaSeException
+     {
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * Se crea un if con el fin de indicarle al metodo que si la cabeza(el primer niño) es nula, retorne
+          * que no hay datos en la lista
+          */
+         if (this.head != null) {
+             /**
+              * Cojemos la lista que ya tenemos y le cremos una temporal
+              */
+             ListSE listTemp = new ListSE();
+             /**
+              * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+              */
+             Node temp = this.head;
+             /**
+              * Creo un ciclo para recorrer la lista SE de principio a fin
+              * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+              */
+             while(temp != null)
+             {
+                  /*if(temp.getData().getAge()!=age){
+                    throw new ListaSeException("No es posible hacer la busqueda pruebe otros datos");
+                 }*/
+                 /**
+                  * tomamos el dato que tenga el ayudante y miramos si la edad es menor o igual a la ingresada
+                  * y si ademas el codigo del genero es correcto, si es correcto lo adicionamos al inicio
+                  * de la nueva lista temporal
+                  */
+                 if(temp.getData().getAge()<=age && temp.getData().getGender().getCode().equals(code)){
+                     /**
+                      * le decimos a nuestro ayudante que lo adicione al inicio de nuestra lista temporal
+                      */
+                     listTemp.addToStart(temp.getData());
+                 }
+                 /**
+                  * sino
+                  */
+                 else {
+                     /**
+                      * tomamos el dato que tenga el ayudante y lo adicionamos al final de la nueva lista temporal
+                      */
+                     listTemp.add(temp.getData());
+                 }
+                 /**
+                  * el ayudante cambia al siguiente node de el que ya esta
+                  */
+                 temp = temp.getNext();
+             }
+             /**
+              * le decimos a la cabeza que agarre nuestra nueva lista temporal
+              */
+             this.head = listTemp.getHead();
+         }
+     }
+
+     //METODO QUE ME ELIMINA A LOS NIÑOS MAYORES A LA EDAD DADA
+
+    /**
+     * Creamos un metodo para que dada una edad el metodo me borre a los que tengan una edad mayor a la ingresada
+     * @param age le entra como parametro el edad del niño
+     * @throws ListaSeException
+     */
+     public void deleteForAge(byte age) throws ListaSeException
+     {
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+          */
+         Node temp = this.head;
+         /**
+          * Creo un ciclo para recorrer la lista SE de principio a fin
+          * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+          */
+         while(temp!=null){
+             /**
+              * tomamos el dato que tenga el ayudante y miramos si la edad es mayor a la suministrada
+              */
+             if(temp.getData().getAge()>age){
+                 /**
+                  * si si es mayor borramos a los niños mayores
+                  */
+                 delete(temp.getData().getIdentification());
+             }
+             /**
+              * el ayudante cambia al siguiente node de el que ya esta
+              */
+             temp=temp.getNext();
+         }
+     }
+
+     //METODO QUE ELIMINA A TODOS LOS NIÑOS DE UN GENERO DE LA LISTA
+    /**
+     * creamos un metodo para que dado un genero por el codigo, nos retire a todos los de ese genero de la lista
+     * @param code le entra como parametro el codigo del genero
+     * @throws ListaSeException
+     */
+     public void deleteForGender(String code) throws ListaSeException{
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+          */
+         Node temp = this.head;
+         /**
+          * Creo un ciclo para recorrer la lista SE de principio a fin
+          * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+          */
+         while(temp!=null){
+             /**
+              * tomamos el dato que tenga el ayudante y miramos si el codigo del genero pertenece al codigo ingresado
+              */
+             if(temp.getData().getGender().getCode().equals(code)){
+                 /**
+                  * si pertenece el codigo a algun genero lo retira, la idea es retirar todos los del mismo genero
+                  */
+                 delete(temp.getData().getIdentification());
+             }
+             /**
+              * el ayudante cambia al siguiente node de el que ya esta
+              */
+             temp=temp.getNext();
+         }
+     }
+
+     //METODO QUE PERMITE LISTAR A TODOS LOS NIÑOS POR EL GRADO
+
+    /**
+     * Creamos un metodo para que dado un grado me liste a los niños pertenecientes a ese grado
+     * @param grade parametro ingresado para saber el grado que debe de buscar y listar
+     * @throws ListaSeException
+     */
+     public void listForGrade(byte grade) throws ListaSeException{
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * Se crea un if con el fin de indicarle al metodo que si la cabeza(el primer niño) es nula, retorne
+          * que no hay datos en la lista
+          */
+         if (this.head != null) {
+             /**
+              * Cojemos la lista que ya tenemos y le cremos una temporal
+              */
+             ListSE listTemp = new ListSE();
+             /**
+              * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+              */
+             Node temp = this.head;
+             /**
+              * Creo un ciclo para recorrer la lista SE de principio a fin
+              * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+              */
+             while(temp != null)
+             {
+                 /**
+                  * tomamos el dato que tenga el ayudante y miramos si el grado es igual al grado ingresado
+                  */
+                 if (temp.getData().getGrade()==grade){
+                     /**
+                      * le decimos a nuestro ayudante que lo adicione al inicio de nuestra lista temporal
+                      */
+                     listTemp.addToStart(temp.getData());
+                 }
+                 /**
+                  * el ayudante cambia al siguiente node de el que ya esta
+                  */
+                 temp = temp.getNext();
+             }
+             /**
+              * le decimos a la cabeza que agarre nuestra nueva lista temporal
+              */
+             this.head = listTemp.getHead();
+         }
+     }
+
+     //Metodo que nos ordena todos los niños por edad
+    /**
+     * Creamos un metodo con el fin de ordenar todos los niños de menor a mayor segun su edad
+     * @throws ListaSeException
+     */
+    public void orderBoysAge()throws ListaSeException {
         /**
-         * Se crea un if con el fin de indicarle al metodo que si la cabeza(el primer niño) es nula, retorne
-         * que no hay datos en la lista
+         * llamamos este metodo para indicar si la lista tiene algo o no
          */
-        if(this.head==null)
-        {
+        validateListEmpty();
+        /**
+         * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+         */
+        Node temp = this.head;
+        /**
+         * Creo un ciclo para recorrer la lista SE de principio a fin
+         * llego al final cuando mi ayudante ya quede parado el el niño antes del ultimo niño antes del null
+         */
+        while(temp.getNext() != null) {
             /**
-             * se crea la excepcion para responder el mensage (no hay datos en la lista)
+             * tomamos el dato que tenga el ayudante y miramos si la edad es mayor a la edad del siguiente
              */
-            throw new ListaSeException("No hay datos en la lista");
+            if(temp.getData().getAge()>temp.getNext().getData().getAge()){
+                /**
+                 * creamos un espacio para el niño que tiene nuestro ayudante mayor al niño siguiente
+                 */
+                Boy boy = temp.getData();
+                /**
+                 * borramos al que tiene agarrado el ayudante, porque ya lo guardamos en otro espacio
+                 */
+                delete(temp.getData().getIdentification());
+                /**
+                 * adicionamos al niño que tenemos separado al final de la lista
+                 */
+                add(boy);
+                /**
+                 * nuestro ayudante vuelve y va a la cabeza
+                 */
+                temp =this.head;
+            }
+            /**
+             * sino
+             */
+            else{
+                /**
+                 * el ayudante cambia al siguiente node de el que ya esta
+                 */
+                temp = temp.getNext();
+            }
         }
     }
+
+    //METODO QUE ME BORRA SEGUN UNA POSICION INGRESADA
+
+    /**
+     * Creamos un metodo con el fin de borrar un niño de una posicion ingresada
+     * @param position es el parametro que le ingresamos para poder saber la posicion a eliminar
+     * @throws ListaSeException
+     */
+     public void deleteByPosition(int position) throws ListaSeException {
+         /**
+          * llamamos este metodo para indicar si la lista tiene algo o no
+          */
+         validateListEmpty();
+         /**
+          * tomamos la posicion ingresada y comparamos si es mayor que el contador
+          */
+         if(position > count) {
+             /**
+              * si la posicion es mayor que el contador retornamos una excepcion indicando que la posicion no es valida
+              */
+             throw new ListaSeException("la posicion no es valida");
+         }
+         /**
+          * tomamos la posicion ingresada y comparamos si es igual a 1
+          */
+         if(position==1) {
+             /**
+              * borramos lo que tenga la cabeza ya que este seria la primera posicion
+              */
+             delete(head.getData().getIdentification());
+         }
+         /**
+          * sino
+          */
+         else {
+             /**
+              * iniciamos un contador en 1
+              */
+             int cont=1;
+             /**
+              * llamamos un ayudante y lo ubicamos en la cabeza(el primer niño)
+              */
+             Node temp = this.head;
+             /**
+              * Creo un ciclo para recorrer la lista SE de principio a fin
+              * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
+              */
+             while(temp!=null) {
+                 /**
+                  * tomamos el contador y evaluamos si es igual a la posicion que tenemos -1, si esto pasa
+                  * frenamos el condicional
+                  */
+                 if(cont == position-1 ) {
+                     break;
+                 }
+                 /**
+                  * el ayudante cambia al siguiente node de el que ya esta
+                  */
+                 temp= temp.getNext();
+                 /**
+                  * incrementamos el contador
+                  */
+                 cont++;
+             }
+             /**
+              * borramos el dato que tenga el ayudante en su momento, porque ese dato seria el de la posicion ingresada
+              */
+             delete(temp.getNext().getData().getIdentification());
+         }
+     }
+
+     ////////////////////////
+
+     //METODO QUE NOS VALIDA SI SI HAY DATOS EN LA LISTA
+     /**
+      * creamos el metodo para evaluar si en la lista hay 1 o mas datos
+      * @throws ListaSeException se lanza la excepcion en caso de no haber datos
+      */
+     public void validateListEmpty() throws ListaSeException
+     {
+         /**
+          * Se crea un if con el fin de indicarle al metodo que si la cabeza(el primer niño) es nula, retorne
+          * que no hay datos en la lista
+          */
+         if(this.head==null)
+         {
+             /**
+              * se crea la excepcion para responder el mensage (no hay datos en la lista)
+              */
+             throw new ListaSeException("No hay datos en la lista");
+         }
+     }
 
     ////////////////////////
 

@@ -3,10 +3,7 @@ package com.umanizales.lists_prog2.model;
 import lombok.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -55,7 +52,8 @@ public class Boy {
     private Location location;
     @NotNull
     @Positive
-    @Size(min=1, max = 5)
+    @Max(value = 5,message = "Debe de ingresar un grado valido")
+    //@Size(min=1, max = 5)
     /**
      * atributo creado para saber el grado en el que se encuentra el niño o niña (1,2,3,4,5)
      */
