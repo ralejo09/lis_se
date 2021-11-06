@@ -1004,7 +1004,8 @@ public class ListSE {
      * @param grade parametro ingresado para saber el grado que debe de buscar y listar
      * @throws ListaSeException
      */
-     public void listForGrade(byte grade) throws ListaSeException{
+     public void listForGrade(byte grade) throws ListaSeException
+     {
          /**
           * llamamos este metodo para indicar si la lista tiene algo o no
           */
@@ -1102,7 +1103,6 @@ public class ListSE {
     }
 
     //METODO QUE ME BORRA SEGUN UNA POSICION INGRESADA
-
     /**
      * Creamos un metodo con el fin de borrar un niño de una posicion ingresada
      * @param position es el parametro que le ingresamos para poder saber la posicion a eliminar
