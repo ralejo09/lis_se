@@ -2,6 +2,8 @@ package com.umanizales.lists_prog2.service;
 
 import com.umanizales.lists_prog2.Exception.ListaDeException;
 import com.umanizales.lists_prog2.Exception.ListaSeException;
+import com.umanizales.lists_prog2.controller.dto.GendersByGradesDTO;
+import com.umanizales.lists_prog2.controller.dto.GradesByLocationDTO;
 import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
 import com.umanizales.lists_prog2.model.*;
 import com.umanizales.lists_prog2.model.listaDe.ListDe;
@@ -346,7 +348,7 @@ public class ListDeService {
      * @param age parametro que nos pide una edad
      * @param code parametro que nos pide el codigo de localizacion, este debe de ser valido
      * @return restorna una respuesta al metodo
-     * @throws ListaSeException
+     * @throws ListaDeException
      */
     public ResponseEntity<ResponseDTO> listForAgeAndLocaDe(int age, String code) throws ListaDeException
     {
@@ -528,6 +530,52 @@ public class ListDeService {
          * retornamos una respuesta indicando que la accion fue correcta
          */
         return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
+    }
+
+
+
+
+    /*public ResponseEntity<ResponseDTO> getBoysByGenderOrphanDe()throws ListaDeException
+    {
+        /**
+         * creamos una lista para guardar el genero con su cantidad
+         */
+    /*    List<BoysByGender> boysByGenders = new ArrayList<>();
+        /**
+         * hacemos un ciclo for que nis recorra la lista
+         */
+    /*    for(Gender1 gender:genders)
+        {
+            /**
+             * recorremos la lista y va contando el genero por medio del codigo
+             */
+    /*        int count = listBoys.getCountBoysByGenderStructurDe(gender.getCode());
+            /**
+             * adicionamos cada genero contado es forma de lista con sus cantidades
+             */
+    /*        boysByGenders.add(new BoysByGender(gender,count));
+        }
+        /**
+         * retornamos una respuesta indicando que la accion fue correcta
+         */
+    /*    return new ResponseEntity<>(new ResponseDTO("Satisfactorio",boysByGenders,null), HttpStatus.OK);
+    }*/
+
+    /*
+    public ResponseEntity<ResponseDTO> ListForGradeAndGenderDe(byte grade, String code) throws ListaDeException
+    {
+        return new ResponseEntity<>(new ResponseDTO("Eliminado", listBoys.listForGradeAndGenderDe(grade,code), null), HttpStatus.OK);
+    }*/
+
+    public ResponseEntity<ResponseDTO>  getOrphansByGradeByLocation() throws ListaDeException
+    {
+        List<GradesByLocationDTO> gradeByLocationDTOS = new ArrayList<>();
+        for (Location loc: locations)
+        {
+            gradeByLocationDTOS.add(listBoys.getGradesByLocation(loc));
+        }
+
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio", gradeByLocationDTOS, null), HttpStatus.OK);
     }
 
 

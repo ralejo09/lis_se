@@ -57,5 +57,11 @@ public class Boy {
     /**
      * atributo creado para saber el grado en el que se encuentra el niño o niña (1,2,3,4,5)
      */
+    @NotNull
     private byte grade;
+    /**
+     *
+     */
+    @NotNull
+    private boolean orphan;
 }

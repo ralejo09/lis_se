@@ -212,6 +212,10 @@ public class BoysController {
         return listDeService.deleteForPositionDe(position);
     }
 
+    @GetMapping(path = "boysbygenderorphande")
+    public ResponseEntity<ResponseDTO> boysByGenderorphanDe() throws ListaDeException
+    {return listDeService.getOrphansByGradeByLocation();}
+
 
 
 
