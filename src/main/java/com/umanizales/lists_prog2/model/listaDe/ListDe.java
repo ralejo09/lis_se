@@ -1,9 +1,7 @@
 package com.umanizales.lists_prog2.model.listaDe;
 
 import com.umanizales.lists_prog2.Exception.ListaDeException;
-import com.umanizales.lists_prog2.controller.dto.CountByGenderDTO;
-import com.umanizales.lists_prog2.controller.dto.GendersByGradesDTO;
-import com.umanizales.lists_prog2.controller.dto.GradesByLocationDTO;
+import com.umanizales.lists_prog2.controller.dto.*;
 import com.umanizales.lists_prog2.model.*;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -75,6 +73,8 @@ public class ListDe {
              * llego al final cuando mi ayudante ya quede parado en el ultimo niño antes del null
              */
             while (temp.getNext() != null) {
+
+
                 /**
                  * el ayudante cambia al siguiente node de el que ya esta
                  */
@@ -1177,6 +1177,192 @@ public class ListDe {
         }
     }
 
+    public GendersByGradesDTO listForGradeAndGenderDe(byte grade, Location location) throws ListaDeException {
+        validateListEmpty();
+        List<CountByGenderDTO> countByGenderDTOS = new ArrayList<>();
+        Node temp = this.head;
+        int count = 0;
+        int countF = 0;
+        int countM = 0;
+
+        while (temp != null) {
+            if (temp.getData().getLocation().getCode().equals(location) && temp.getData().getGrade() == grade) {
+                count++;
+                if (temp.getData().isOrphan()) {
+                    if (temp.getData().getGender().getCode().equals("2")) {
+                        countM++;
+                    } else {
+                        countF++;
+                    }
+                }
+            }
+            temp = temp.getNext();
+        }
+        countByGenderDTOS.add(new CountByGenderDTO("2", countM));
+        countByGenderDTOS.add(new CountByGenderDTO("1", countF));
+
+        GendersByGradesDTO genderByGradeDTO = new GendersByGradesDTO(grade, countByGenderDTOS, count);
+
+        return genderByGradeDTO;
+    }
+
+
+    public GradesByLocationDTO getGradesByLocation(Location location) throws ListaDeException {
+        /**
+         * Creo una lista de tipo GenderbyGrade, esta me pide un
+         */
+        List<GendersByGradesDTO> genderByGradeDTOS = new ArrayList<>();
+        for (byte i = 1; i <= 5; i++) {
+            genderByGradeDTOS.add(listForGradeAndGenderDe(i, location));
+        }
+        GradesByLocationDTO gradeByLocationDTO = new GradesByLocationDTO(location, genderByGradeDTOS);
+
+        return gradeByLocationDTO;
+    }
+
+    /**
+     * creammos un metodo que nos adiciona un nodo
+     * @param nodeint recibimos como parametro el nodo
+     * @throws ListaDeException
+     */
+    public void addNode(Node nodeint)throws ListaDeException{
+        /**
+         * decimos que si la cabeza es igual a null no coloque lo que ya tenemos
+         */
+        if(this.head == null){
+            /**
+             * nodo int es la lista ya existente
+             *
+             */
+            this.head = nodeint;
+        }
+        /**
+         * sino
+         */
+        else {
+            /**
+             * llamamos un ayudante
+             */
+            Node temp = head;
+            /**
+             * creamos un ciclo que nos recorra la lista hasta parar en el ultimo
+             */
+            while (temp.getNext() != null) {
+                /**
+                 * ya estamos parados en el ultimo
+                 */
+                temp = temp.getNext();
+            }
+            /**
+             * le decimos a nuestro ayudante que tome el nodo
+             */
+            temp.setNext(nodeint);
+            /**
+             * el nodo agarra a su anterior que es el temp
+             */
+            nodeint.setPrevious(temp);
+        }
+    }
+
+    /**
+     * creamos un metodo que nos de una lista por cada localizacion
+     * @param location parametro que solicita el metodo
+     * @return retorna la lista de cada lozalizacion
+     * @throws ListaDeException
+     */
+    public ListDe listDeLocation (Location location)throws ListaDeException{
+        /**
+         * validamos que la lista tenga datos
+         */
+        validateListEmpty();
+        /**
+         * creamos una lista temporal
+         */
+        ListDe listemp = new ListDe();
+        /**
+         * llamamos un ayudante
+         */
+        Node temp = this.head;
+        /**
+         * creamos un ciclo para recorrer la lista
+         */
+        while(temp!= null){
+            /**
+             * los que sean iguales a la localizacion entregada
+             */
+            if (temp.getData().getLocation().equals(location)){
+                /**
+                 * los agrega ese dato a la lista temporal
+                 */
+                listemp.addDe(temp.getData());
+            }
+            /**
+             * nuestro ayudante pasa a el siguiente
+             */
+            temp = temp.getNext();
+        }
+        /**
+         * retornamos la lista
+         */
+        return listemp;
+    }
+
+
+    public RhByGradesDTO getGradesRhDTOByGrades(byte grade)throws ListaDeException{
+        validateListEmpty();
+        Node temp = this.head;
+        String rh = " ";
+        int count = 0;
+        while (temp != null){
+            if(temp.getData().getGrade() == grade) {
+                if (!rh.contains(temp.getData().getRh())) {
+                    rh = rh + ", " + temp.getData().getRh();
+                }
+                count++;
+            }
+            temp = temp.getNext();
+        }
+        return new RhByGradesDTO(grade,rh,count);
+    }
+
+    public GradesByGenderDTO getGradesByGenderDTO(Gender1 gender)throws ListaDeException{
+        validateListEmpty();
+        RhByGradesDTO[] rhByGradesDTOS = new RhByGradesDTO[5];
+        for (byte i = 1; i <= 5; i++) {
+            rhByGradesDTOS[i]= getGradesRhDTOByGrades((byte)(i+1));
+        }
+        return new GradesByGenderDTO(gender,rhByGradesDTOS);
+    }
+
+    public GenderByLocationDTO getGenderByLocation(Location location) throws ListaDeException {
+        validateListEmpty();
+        List<GradesByGenderDTO> gradesByGenderDTOS = new ArrayList<>();
+        int count = 0;
+        Node temp = head;
+        while (temp != null){
+            if (temp.getData().getLocation().getCode().equals(location)) {
+                gradesByGenderDTOS.add(getGradesByGenderDTO(temp.getData().getGender()));
+                count++;
+            }
+            temp = temp.getNext();
+        }
+        GenderByLocationDTO genderByLocationDTO = new GenderByLocationDTO(location,gradesByGenderDTOS, count);
+        return genderByLocationDTO;
+    }
+
+            //if(){
+                //gradesByGenderDTOS.add(getGradesByGenderDTO());
+            //}
+            //GradesByLocationDTO gradeByLocationDTO = new GenderByLocationDTO(location,gradesByGenderDTOS, count);
+
+            //return gradeByLocationDTO;
+
+
+
+
+
+
+
     //public int getCountBoysByGenderStructurDe(String code) throws ListaDeException
     //{
     //    validateListEmpty();
@@ -1232,47 +1418,7 @@ public class ListDe {
         }
         return count;
     }*/
-    public GendersByGradesDTO listForGradeAndGenderDe(byte grade, Location location) throws ListaDeException {
-        validateListEmpty();
-        List<CountByGenderDTO> countByGenderDTOS = new ArrayList<>();
-        Node temp = this.head;
-        int count = 0;
-        int countF = 0;
-        int countM = 0;
 
-        while (temp != null) {
-            if (temp.getData().getLocation().getCode().equals(location) && temp.getData().getGrade() == grade) {
-                count++;
-                if (temp.getData().isOrphan()) {
-                    if (temp.getData().getGender().getCode().equals("2")) {
-                        countM++;
-                    } else {
-                        countF++;
-                    }
-                }
-            }
-            temp = temp.getNext();
-        }
-        countByGenderDTOS.add(new CountByGenderDTO("2", countM));
-        countByGenderDTOS.add(new CountByGenderDTO("1", countF));
-
-        GendersByGradesDTO genderByGradeDTO = new GendersByGradesDTO(grade, countByGenderDTOS, count);
-
-        return genderByGradeDTO;
-    }
-
-    public GradesByLocationDTO getGradesByLocation(Location location) throws ListaDeException {
-        /**
-         * Creo una lista de tipo GenderbyGrade, esta me pide un
-         */
-        List<GendersByGradesDTO> genderByGradeDTOS = new ArrayList<>();
-        for (byte i = 1; i <= 5; i++) {
-            genderByGradeDTOS.add(listForGradeAndGenderDe(i, location));
-        }
-        GradesByLocationDTO gradeByLocationDTO = new GradesByLocationDTO(location, genderByGradeDTOS);
-
-        return gradeByLocationDTO;
-    }
 
 
 

@@ -2,9 +2,7 @@ package com.umanizales.lists_prog2.service;
 
 import com.umanizales.lists_prog2.Exception.ListaDeException;
 import com.umanizales.lists_prog2.Exception.ListaSeException;
-import com.umanizales.lists_prog2.controller.dto.GendersByGradesDTO;
-import com.umanizales.lists_prog2.controller.dto.GradesByLocationDTO;
-import com.umanizales.lists_prog2.controller.dto.ResponseDTO;
+import com.umanizales.lists_prog2.controller.dto.*;
 import com.umanizales.lists_prog2.model.*;
 import com.umanizales.lists_prog2.model.listaDe.ListDe;
 import lombok.Getter;
@@ -53,11 +51,11 @@ public class ListDeService {
     private void initializeLocations()
     {
         locations= new ArrayList<>();
-        locations.add(new Location("1","Manizales"));
+        locations.add(new Location("1","Armenia"));
         locations.add(new Location("2","Bogota"));
-        locations.add(new Location("3","Armenia"));
-        locations.add(new Location("4","Pereira"));
-        locations.add(new Location("5","Cali"));
+        locations.add(new Location("3","Cali"));
+        locations.add(new Location("4","Manizales"));
+        locations.add(new Location("5","Pereira"));
     }
 
     /**
@@ -532,6 +530,66 @@ public class ListDeService {
         return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
     }
 
+    public ResponseEntity<ResponseDTO>  getOrphansByGradeByLocation() throws ListaDeException
+    {
+        List<GradesByLocationDTO> gradeByLocationDTOS = new ArrayList<>();
+        for (Location loc: locations)
+        {
+            gradeByLocationDTOS.add(listBoys.getGradesByLocation(loc));
+        }
+
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio", gradeByLocationDTOS, null), HttpStatus.OK);
+    }
+
+    /**
+     * respuesta que nos lanza al ordenar las localizaciones
+     * @return retornamos una respuesta
+     * @throws ListaDeException
+     */
+    public ResponseEntity<ResponseDTO>  orderLocation() throws ListaDeException
+    {
+        /**
+         * creamos una lista temporal
+         */
+        ListDe listTemp = new ListDe();
+        /**
+         * creamos un ciclo que nos recorra las localizaciones
+         */
+        for (Location loc: locations)
+        {
+            /**
+             * creamos una lista en donde se listaran en orden las localizaciones
+             */
+            ListDe listloc = this.listBoys.listDeLocation(loc);
+            /**
+             *  si la cabeza de nuestra lista tiene algun dato, nos agrega el node a la lista temporal
+             */
+            if(listloc.getHead()!=null){
+                /**
+                 * le agregamos los nodos a nuestra lista temporal
+                 */
+                listTemp.addNode(listloc.getHead());
+            }
+        }
+        /**
+         * retornamos una respuesta indicando que la lista
+         */
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio", listTemp.listDe(), null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDTO>  getGenderByLocation() throws ListaDeException
+    {
+        List<GenderByLocationDTO> genderByLocationDTOS = new ArrayList<>();
+        for (Location loc: locations)
+        {
+            genderByLocationDTOS.add(listBoys.getGenderByLocation(loc));
+        }
+
+        return new ResponseEntity<>(new ResponseDTO("Satisfactorio", genderByLocationDTOS, null), HttpStatus.OK);
+    }
+
+
+
 
 
 
@@ -566,26 +624,6 @@ public class ListDeService {
     {
         return new ResponseEntity<>(new ResponseDTO("Eliminado", listBoys.listForGradeAndGenderDe(grade,code), null), HttpStatus.OK);
     }*/
-
-    public ResponseEntity<ResponseDTO>  getOrphansByGradeByLocation() throws ListaDeException
-    {
-        List<GradesByLocationDTO> gradeByLocationDTOS = new ArrayList<>();
-        for (Location loc: locations)
-        {
-            gradeByLocationDTOS.add(listBoys.getGradesByLocation(loc));
-        }
-
-        return new ResponseEntity<>(new ResponseDTO("Satisfactorio", gradeByLocationDTOS, null), HttpStatus.OK);
-    }
-
-
-
-
-
-
-
-
-
 
 
 
