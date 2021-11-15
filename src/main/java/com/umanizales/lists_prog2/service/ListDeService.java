@@ -599,6 +599,7 @@ public class ListDeService {
      * @return retornamos una respuesta satisfactoria a todo el proceso
      * @throws ListaDeException
      */
+    //
     public ResponseEntity<ResponseDTO>  getGenderByLocation() throws ListaDeException
     {
         /**
