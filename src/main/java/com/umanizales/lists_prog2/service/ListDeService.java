@@ -530,14 +530,31 @@ public class ListDeService {
         return new ResponseEntity<>(new ResponseDTO("Eliminado", true, null), HttpStatus.OK);
     }
 
+    /**
+     * respuesta que le damos al metodo propuesto en clase de la tabla de huerfanos
+     * @return la estructura con sus datos
+     * @throws ListaDeException
+     */
     public ResponseEntity<ResponseDTO>  getOrphansByGradeByLocation() throws ListaDeException
     {
+        /**
+         * creamos una lista para almacenar todos los datos
+         */
         List<GradesByLocationDTO> gradeByLocationDTOS = new ArrayList<>();
+        /**
+         * recorremos las localizaciones
+         */
         for (Location loc: locations)
         {
+            /**
+             * adicionaremos las localizaciones a nuestra lista
+             */
             gradeByLocationDTOS.add(listBoys.getGradesByLocation(loc));
         }
-
+        /**
+         * retornamos una respuesta indicando que la accion fue correcta y tambien retornaremos
+         * toda la estructura de la tabla
+         */
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio", gradeByLocationDTOS, null), HttpStatus.OK);
     }
 
@@ -577,14 +594,31 @@ public class ListDeService {
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio", listTemp.listDe(), null), HttpStatus.OK);
     }
 
+    /**
+     * respuesta que le damos al metodo propuesto en clase de la tabla de listar y mostras los rh por grados
+     * @return retornamos una respuesta satisfactoria a todo el proceso
+     * @throws ListaDeException
+     */
     public ResponseEntity<ResponseDTO>  getGenderByLocation() throws ListaDeException
     {
+        /**
+         * creamos una lista para almacenar todos los datos
+         */
         List<GenderByLocationDTO> genderByLocationDTOS = new ArrayList<>();
+        /**
+         * recorremos las localizaciones
+         */
         for (Location loc: locations)
         {
+            /**
+             * adicionaremos las localizaciones a nuestra lista
+             */
             genderByLocationDTOS.add(listBoys.getGenderByLocation(loc));
         }
-
+        /**
+         * retornamos una respuesta indicando que la accion fue correcta y tambien retornaremos
+         * toda la estructura de la tabla
+         */
         return new ResponseEntity<>(new ResponseDTO("Satisfactorio", genderByLocationDTOS, null), HttpStatus.OK);
     }
 
@@ -624,9 +658,6 @@ public class ListDeService {
     {
         return new ResponseEntity<>(new ResponseDTO("Eliminado", listBoys.listForGradeAndGenderDe(grade,code), null), HttpStatus.OK);
     }*/
-
-
-
 
    /* private ListDe listBoys;
     //private List<Location> locations;
